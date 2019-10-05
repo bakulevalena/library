@@ -35,9 +35,9 @@ public class AuthorController {
         return ResponseEntity.ok(authorId);
     }
 
-    @RequestMapping(value = "/api/authors/{authorId}", method = RequestMethod.GET)
-    public ResponseEntity getAuthor(@PathVariable Long authorId) {
-        return ResponseEntity.ok(authorServices.getAuthor(authorId));
+    @RequestMapping(value = "/api/authors/{authorID}", method = RequestMethod.GET)
+    public ResponseEntity getAuthor(@PathVariable Long authorID) {
+        return ResponseEntity.ok(authorServices.getAuthor(authorID));
     }
 
 
