@@ -20,7 +20,7 @@ public class AuthorProcessingService implements AuthorServices {
     @Override
     public String processAuthor(AuthorDTO author) {
         Author savedAuthor = new Author();
-        savedAuthor.setAuthorName(savedAuthor.getAuthorName());
+        savedAuthor.setAuthorName(author.getName());
         authorRepository.save(savedAuthor);
         return "Saved";
     }
