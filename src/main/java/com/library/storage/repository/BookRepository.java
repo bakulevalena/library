@@ -9,7 +9,11 @@ import java.util.List;
 
 @Repository
 public interface BookRepository extends CrudRepository<Book, Long> {
-    //List<Book> findBookAndAuthor();
+    List<Book> findAll();
+
     List<Book> findBookByAuthor(Author author);
+
+    Book findBookById(Long id);
+
     Long countBookByAuthor(Author Author);
 }

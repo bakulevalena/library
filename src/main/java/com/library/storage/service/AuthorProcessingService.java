@@ -32,6 +32,7 @@ public class AuthorProcessingService implements AuthorServices {
         for (Author author : allAuthors) {
             AuthorDTO temp = new AuthorDTO();
             temp.setName(author.getAuthorName());
+            temp.setBookCount(author.getBooks().size());
             resultList.add(temp);
         }
         return resultList;
@@ -43,9 +44,11 @@ public class AuthorProcessingService implements AuthorServices {
         Author author = authorRepository.findAuthorById(id);
         if (author != null) {
             authorDTO.setName(author.getAuthorName());
+            authorDTO.setBookCount(author.getBooks().size());
         } else {
             return null;
         }
         return authorDTO;
     }
+
 }

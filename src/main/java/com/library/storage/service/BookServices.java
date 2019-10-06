@@ -1,18 +1,20 @@
 package com.library.storage.service;
 
 import com.library.storage.dto.AuthorDTO;
+import com.library.storage.dto.BookDTO;
 import com.library.storage.entity.Book;
 
 import java.util.List;
 
 public interface BookServices {
-    Long countBooks(AuthorDTO Author);
 
-    List<Book> getAllBooks();
+    List<BookDTO> getAllBooks();
 
-    Book getBook(Long authorID, Long bookID);
+    BookDTO getBook(Long bookID);
 
-    String proceedBook(AuthorDTO author);
+    String proceedBook(Long authorID, BookDTO bookTitle);
 
-    Book getBookByAuthor(AuthorDTO author);
+    List<BookDTO> getBookByAuthor(Long authorId);
+
+    BookDTO getBookByAuthorAndId(Long authorId, Long bookId);
 }
