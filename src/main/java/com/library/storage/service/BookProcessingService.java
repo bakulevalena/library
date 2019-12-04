@@ -38,7 +38,7 @@ public class BookProcessingService implements BookServices {
             resultList.add(temp);
         }
         if (allBooks.isEmpty()) {
-            logger.warn("Unable to get all books");
+            logger.debug("No books here");
         } else {
             logger.debug("Get all the books are finished");
         }

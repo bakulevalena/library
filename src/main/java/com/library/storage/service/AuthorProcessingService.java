@@ -44,7 +44,7 @@ public class AuthorProcessingService implements AuthorServices {
             resultList.add(temp);
         }
         if (allAuthors.isEmpty()) {
-            logger.warn("Unable to get all authors");
+            logger.debug("No authors here");
         } else {
             logger.debug("Authors are gotten");
         }
