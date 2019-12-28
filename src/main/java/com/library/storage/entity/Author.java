@@ -1,9 +1,12 @@
 package com.library.storage.entity;
 
+import lombok.Data;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @Entity
 public class Author {
 
@@ -15,31 +18,5 @@ public class Author {
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Book> books = new ArrayList<>();
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getAuthorName() {
-        return authorName;
-    }
-
-    public void setAuthorName(String author) {
-        this.authorName = author;
-    }
-
-    public List<Book> getBooks() {
-        return books;
-    }
-
-    public void addBook(Book book) {
-        books.add(book);
-        book.setAuthor(this);
-    }
-
-    public void removeBook(Book book) {
-        books.remove(book);
-        book.setAuthor(null);
-    }
 
 }
