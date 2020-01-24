@@ -1,11 +1,10 @@
-package com.library.storage.serviloggerce;
+package com.library.storage.service;
 
 import com.library.storage.dto.BookDTO;
 import com.library.storage.entity.Author;
 import com.library.storage.entity.Book;
 import com.library.storage.repository.AuthorRepository;
 import com.library.storage.repository.BookRepository;
-import com.library.storage.service.BookServices;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -108,6 +107,23 @@ public class BookProcessingService implements BookServices {
             log.warn("Unable to ger book by author ID {}", authorId);
             return null;
         }
+    }
+
+    @Override
+    public String getAllBooksString() {
+        StringBuilder result = new StringBuilder();
+        List<BookDTO> bookDTOList = getAllBooks();
+        if (bookDTOList.isEmpty()) {
+            result.append("No books here");
+        } else {
+            for (BookDTO book : bookDTOList) {
+                result.append(book.getTitle());
+                result.append(" - ");
+                result.append(book.getAuthor());
+                result.append('\n');
+            }
+        }
+        return result.toString();
     }
 
     @Override
