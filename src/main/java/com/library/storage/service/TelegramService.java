@@ -15,6 +15,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -23,12 +24,19 @@ public class TelegramService {
     private static final String SET_WEBHOOK_ACTION = "/setWebhook";
     private static final String DELETE_WEBHOOK_ACTION = "/deleteWebhook";
     private static final String SEND_MESSAGE_ACTION = "/sendMessage";
+    private static final String BOOK_COMMAND = "/books";
+    private static final String VERSION_COMMAND = "/version";
+    private static final String AUTHORS_COMMAND = "/authors";
 
     private final RestTemplate restTemplate;
     private final TelegramConfig telegramConfig;
+    private final BookServices bookServices;
+    private final AuthorServices authorServices;
 
     @Value("${external-url}")
     private String externalUrl;
+    @Value("${version}")
+    private String version;
 
 
     @PostConstruct
@@ -86,6 +94,30 @@ public class TelegramService {
                 .append(telegramConfig.getToken())
                 .append(action)
                 .toString();
+    }
+
+    public void createResponse(Long chat, String text, List<Telegram.Entity> entities) {
+        log.debug("Got message from Telegram: Text = {}, chat = {}", text, chat);
+        if (entities.isEmpty()) {
+            sendMessage(chat, "Use command");
+            return;
+        }
+        for (Telegram.Entity entity : entities) {
+            String task = text.substring(entity.getOffset(), entity.getLength() + entity.getOffset()).toLowerCase();
+            switch (task) {
+                case VERSION_COMMAND:
+                    sendMessage(chat, version);
+                    break;
+                case BOOK_COMMAND:
+                    sendMessage(chat, bookServices.getAllBooksString());
+                    break;
+                case AUTHORS_COMMAND:
+                    sendMessage(chat, authorServices.getAllAuthorsString());
+                    break;
+                default:
+                    sendMessage(chat, "Use proper command");
+            }
+        }
     }
 
 

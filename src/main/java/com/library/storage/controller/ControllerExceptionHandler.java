@@ -13,7 +13,6 @@ public class ControllerExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public void notFoundHandler(final Exception e) {
-        log.error("HTTP 500 returned", e);
+        log.error("The error was occurred ", e);
     }
-
 }
