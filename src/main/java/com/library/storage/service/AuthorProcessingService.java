@@ -3,38 +3,35 @@ package com.library.storage.service;
 import com.library.storage.dto.AuthorDTO;
 import com.library.storage.entity.Author;
 import com.library.storage.repository.AuthorRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
+@RequiredArgsConstructor
 @Service
 public class AuthorProcessingService implements AuthorServices {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthorProcessingService.class);
-    private AuthorRepository authorRepository;
-
-    public AuthorProcessingService(AuthorRepository authorRepository) {
-        this.authorRepository = authorRepository;
-    }
+    private final AuthorRepository authorRepository;
 
     @Override
     @Transactional
     public String processAuthor(AuthorDTO author) {
-        logger.debug("Saving the author");
+        log.debug("Saving the author");
         Author savedAuthor = new Author();
         savedAuthor.setAuthorName(author.getName());
         authorRepository.save(savedAuthor);
-        logger.debug("The author is saved");
+        log.debug("The author is saved");
         return "Saved";
     }
 
     @Override
     public List<AuthorDTO> getAllAuthors() {
-        logger.debug("Getting all of authors");
+        log.debug("Getting all of authors");
         List<Author> allAuthors = authorRepository.findAll();
         List<AuthorDTO> resultList = new ArrayList<>(allAuthors.size());
         for (Author author : allAuthors) {
@@ -44,26 +41,43 @@ public class AuthorProcessingService implements AuthorServices {
             resultList.add(temp);
         }
         if (allAuthors.isEmpty()) {
-            logger.debug("No authors here");
+            log.debug("No authors here");
         } else {
-            logger.debug("Authors are gotten");
+            log.debug("Authors are gotten");
         }
         return resultList;
     }
 
     @Override
+    public String getAllAuthorsString() {
+        StringBuilder result = new StringBuilder();
+        List<AuthorDTO> authorDTOList = getAllAuthors();
+        if (authorDTOList.isEmpty()) {
+            result.append("No authors here");
+        } else {
+            for (AuthorDTO author : authorDTOList) {
+                result.append(author.getName());
+                result.append(" ");
+                result.append(author.getBookCount());
+                result.append('\n');
+            }
+        }
+        return result.toString();
+    }
+
+    @Override
     public AuthorDTO getAuthor(Long id) {
-        logger.debug("Getting the author by ID");
+        log.debug("Getting the author by ID");
         AuthorDTO authorDTO = new AuthorDTO();
         Author author = authorRepository.findAuthorById(id);
         if (author != null) {
             authorDTO.setName(author.getAuthorName());
             authorDTO.setBookCount(author.getBooks().size());
         } else {
-            logger.warn("Unable to get the author by ID {}", id);
+            log.warn("Unable to get the author by ID {}", id);
             return null;
         }
-        logger.debug("Author {} is gotten", id);
+        log.debug("Author {} is gotten", id);
         return authorDTO;
     }
 
