@@ -13,6 +13,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <name>storage</name>
     <description>Demo project for Spring Boot</description>
+    <packaging>jar</packaging>
 
     <properties>
         <java.version>11</java.version>
@@ -81,6 +82,7 @@
         </dependency>
     </dependencies>
     <build>
+        <finalName>library-${project.version}</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
