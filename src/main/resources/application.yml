@@ -10,12 +10,14 @@ job:
 
 telegram:
   api-url: https://api.telegram.org/bot
+  token:
 
 version:
   1.0
 
 external:
   url:
+
 
 spring:
   jpa:
