@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClientException;
+import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.PostConstruct;
@@ -33,7 +34,7 @@ public class TelegramService {
     private final BookServices bookServices;
     private final AuthorServices authorServices;
 
-    @Value("${external-url}")
+    @Value("${external.url}")
     private String externalUrl;
     @Value("${version}")
     private String version;
@@ -47,56 +48,22 @@ public class TelegramService {
         MultiValueMap<String, String> headers = new HttpHeaders();
         headers.add("Content-Type", "application/json");
         HttpEntity<Telegram.Webhook> request = new HttpEntity<>(dto, headers);
-        try {
-            ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
-            log.info("Tried to set webhook - result: {}", responseEntity);
-        } catch (RestClientException ex) {
-            log.warn("Tried to set webhook - result: ", ex);
-        }
+        tryPost(SET_WEBHOOK_ACTION, url, request);
     }
 
     @PreDestroy
     public void deleteWebhook() {
         String url = buildUrl(DELETE_WEBHOOK_ACTION);
-        try {
-            ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, null, String.class);
-            log.info("Tried to delete webhook - result: {}", responseEntity);
-        } catch (RestClientException ex) {
-            log.warn("Tried to delete webhook - result: ", ex);
-        }
+        tryPost(DELETE_WEBHOOK_ACTION, url, null);
     }
 
 
     public void sendMessage(Long chat, String text) {
         String url = buildSendUrl(SEND_MESSAGE_ACTION, chat, text);
-        try {
-            ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, null, String.class);
-            log.info("Tried to send message - result: {}", responseEntity);
-        } catch (RestClientException ex) {
-            log.warn("Tried to send message - result: ", ex);
-        }
+        tryPost(SEND_MESSAGE_ACTION, url, null);
     }
 
-    private String buildSendUrl(String action, Long chat, String text) {
-        return new StringBuilder()
-                .append(buildUrl(action))
-                .append("?chat_id=")
-                .append(chat)
-                .append("&text=")
-                .append(text)
-                .toString();
-    }
-
-    @SuppressWarnings("StringBufferReplaceableByString")
-    private String buildUrl(String action) {
-        return new StringBuilder()
-                .append(telegramConfig.getApiUrl())
-                .append(telegramConfig.getToken())
-                .append(action)
-                .toString();
-    }
-
-    public void createResponse(Long chat, String text, List<Telegram.Entity> entities) {
+    public void processMessage(Long chat, String text, List<Telegram.Entity> entities) {
         log.debug("Got message from Telegram: Text = {}, chat = {}", text, chat);
         if (entities.isEmpty()) {
             sendMessage(chat, "Use command");
@@ -120,5 +87,33 @@ public class TelegramService {
         }
     }
 
+    private String buildSendUrl(String action, Long chat, String text) {
+        return new StringBuilder()
+                .append(buildUrl(action))
+                .append("?chat_id=")
+                .append(chat)
+                .append("&text=")
+                .append(text)
+                .toString();
+    }
 
+    @SuppressWarnings("StringBufferReplaceableByString")
+    private String buildUrl(String action) {
+        return new StringBuilder()
+                .append(telegramConfig.getApiUrl())
+                .append(telegramConfig.getToken())
+                .append(action)
+                .toString();
+    }
+
+    private void tryPost (String method, String url, HttpEntity<Telegram.Webhook> request) {
+        try {
+            ResponseEntity<String> responseEntity = restTemplate.postForEntity(url, request, String.class);
+            log.info("Tried to {} - result: {}", method, responseEntity);
+        } catch (RestClientResponseException ex) {
+            log.warn("Tried to {} - result: {}", method, ex.getResponseBodyAsString());
+        } catch (RestClientException ex) {
+            log.warn("Tried to {} - result: ", method, ex);
+        }
+    }
 }

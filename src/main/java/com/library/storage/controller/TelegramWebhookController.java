@@ -29,9 +29,9 @@ public class TelegramWebhookController {
     public ResponseEntity processEvent(@RequestBody String raw) {
         log.debug("Got event from Telegram: Raw = {}", raw);
         try {
-            Telegram.Update message = null;
-            message = objectMapper.readValue(raw, Telegram.Update.class);
-            telegramService.createResponse(message.getMessage().getChat().getId(), message.getMessage().getText(), message.getMessage().getEntities());
+            Telegram.Update update = objectMapper.readValue(raw, Telegram.Update.class);
+            Telegram.Message message = update.getMessage();
+            telegramService.processMessage(message.getChat().getId(), message.getText(), message.getEntities());
         } catch (IOException e) {
             log.warn("Tried to process message - result: ", e);
         }
