@@ -8,7 +8,8 @@
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%logger{36}] %msg%n</pattern>
         </encoder>
     </appender>
-    <property name="HOME_LOG" value="${LOG_PATH}/app.log"/>
+    <property name="LOG_FOLD" value="/var/log/library"/>
+    <property name="HOME_LOG" value="${LOG_FOLD}/app.log"/>
 
     <appender name="FILE-ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${HOME_LOG}</file>
@@ -19,7 +20,7 @@
             <level>ERROR</level>
         </filter>
         <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-            <fileNamePattern>${LOG_PATH}/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <fileNamePattern>${LOG_FOLD}/archived/app.%d{yyyy-MM-dd}.%i.log</fileNamePattern>
             <maxFileSize>10MB</maxFileSize>
             <maxHistory>30</maxHistory>
         </rollingPolicy>

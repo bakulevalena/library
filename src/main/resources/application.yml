@@ -1,9 +1,6 @@
 server:
   port: 8080
 
-logging:
-  path: /var/log/library/
-
 job:
   notification:
     delay: 10000
@@ -12,8 +9,7 @@ telegram:
   api-url: https://api.telegram.org/bot
   token:
 
-version:
-  1.0
+version: 1.0
 
 external:
   url:
@@ -27,9 +23,3 @@ spring:
     url: jdbc:postgresql://localhost:5432/library
     username:
     password:
-
-  #spring:
-  # datasource:
-  #  hikari:
-  #   connection-timeout: 20000
-#  maximum-pool-size: 5

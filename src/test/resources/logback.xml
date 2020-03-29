@@ -1,0 +1,18 @@
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>TRACE</level>
+            <onMatch>DENY</onMatch>
+        </filter>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level [%logger{36}] %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.library.storage" level="DEBUG" additivity="true"/>
+    <logger name="org.springframework" level="INFO" additivity="false"/>
+    <logger name="org.hibernate" level="INFO" additivity="false"/>
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>

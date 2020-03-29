@@ -1,0 +1,30 @@
+server:
+  port: 8080
+
+job:
+  notification:
+    delay: 10000
+
+telegram:
+  api-url: https://api.telegram.org/bot
+
+external:
+  url: https://e9bed709.ngrok.io/api/webhook/telegram
+
+version:
+  1.0
+
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/test_library
+    username: test_library
+    password: test_library
+
+  #spring:
+  # datasource:
+  #  hikari:
+  #   connection-timeout: 20000
+#  maximum-pool-size: 5

@@ -39,7 +39,6 @@ public class TelegramService {
     @Value("${version}")
     private String version;
 
-
     @PostConstruct
     public void setWebhook() {
         String url = buildUrl(SET_WEBHOOK_ACTION);
@@ -57,6 +56,9 @@ public class TelegramService {
         tryPost(DELETE_WEBHOOK_ACTION, url, null);
     }
 
+    public void throwException() {
+        throw new RuntimeException();
+    }
 
     public void sendMessage(Long chat, String text) {
         String url = buildSendUrl(SEND_MESSAGE_ACTION, chat, text);
