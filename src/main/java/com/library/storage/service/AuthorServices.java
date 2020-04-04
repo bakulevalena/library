@@ -12,5 +12,4 @@ public interface AuthorServices {
 
     AuthorDTO getAuthor(Long id);
 
-    String getAllAuthorsString();
 }

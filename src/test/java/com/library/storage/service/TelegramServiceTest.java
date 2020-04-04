@@ -31,15 +31,16 @@ public class TelegramServiceTest {
     @MockBean
     private BookServices bookServices;
 
-    @Test(expected = RuntimeException.class)
-    public void throwException() {
-        telegramService.throwException();
-    }
+   // @Test(expected = RuntimeException.class)
+    //public void throwException() {
+     //   telegramService.throwException();
+    //}
 
     @Test
     public void setWebhook() {
         telegramService.hashCode();
         //telegramService.setWebhook(); - don't try to call it, because of @PostConstruct (called by Spring)
+
         Mockito.verify(restTemplate, Mockito.times(1))
                 .postForEntity(Mockito.contains("/setWebhook"), any(), any());
     }
@@ -47,12 +48,14 @@ public class TelegramServiceTest {
     @Test
     public void deleteWebhook() {
         telegramService.deleteWebhook();
+
         Mockito.verify(restTemplate, Mockito.times(1))
                 .postForEntity(Mockito.contains("/deleteWebhook"), any(), any());
     }
 
     @Test
     public void sendMessage() {
+
         telegramService.sendMessage(CHAT, TEXT);
     }
 

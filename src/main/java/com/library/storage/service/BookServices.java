@@ -12,8 +12,6 @@ public interface BookServices {
 
     String proceedBook(Long authorID, BookDTO bookTitle);
 
-    String getAllBooksString();
-
     List<BookDTO> getBookByAuthor(Long authorId);
 
     BookDTO getBookByAuthorAndId(Long authorId, Long bookId);

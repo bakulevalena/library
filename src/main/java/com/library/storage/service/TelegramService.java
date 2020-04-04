@@ -1,6 +1,8 @@
 package com.library.storage.service;
 
 import com.library.storage.config.TelegramConfig;
+import com.library.storage.dto.AuthorDTO;
+import com.library.storage.dto.BookDTO;
 import com.library.storage.dto.Telegram;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,9 +58,9 @@ public class TelegramService {
         tryPost(DELETE_WEBHOOK_ACTION, url, null);
     }
 
-    public void throwException() {
-        throw new RuntimeException();
-    }
+    //public void throwException() {
+    //    throw new RuntimeException();
+    //}
 
     public void sendMessage(Long chat, String text) {
         String url = buildSendUrl(SEND_MESSAGE_ACTION, chat, text);
@@ -78,10 +80,10 @@ public class TelegramService {
                     sendMessage(chat, version);
                     break;
                 case BOOK_COMMAND:
-                    sendMessage(chat, bookServices.getAllBooksString());
+                    sendMessage(chat, getBookString());
                     break;
                 case AUTHORS_COMMAND:
-                    sendMessage(chat, authorServices.getAllAuthorsString());
+                    sendMessage(chat, getAuthorsString());
                     break;
                 default:
                     sendMessage(chat, "Use proper command");
@@ -106,6 +108,38 @@ public class TelegramService {
                 .append(telegramConfig.getToken())
                 .append(action)
                 .toString();
+    }
+
+    private String getAuthorsString() {
+        StringBuilder result = new StringBuilder();
+        List<AuthorDTO> authorDTOList = authorServices.getAllAuthors();
+        if (authorDTOList.isEmpty()) {
+            result.append("No authors here");
+        } else {
+            for (AuthorDTO author : authorDTOList) {
+                result.append(author.getName());
+                result.append(" ");
+                result.append(author.getBookCount());
+                result.append('\n');
+            }
+        }
+        return result.toString();
+    }
+
+    private String getBookString() {
+        StringBuilder result = new StringBuilder();
+        List<BookDTO> bookDTOList = bookServices.getAllBooks();
+        if (bookDTOList.isEmpty()) {
+            result.append("No books here");
+        } else {
+            for (BookDTO book : bookDTOList) {
+                result.append(book.getTitle());
+                result.append(" - ");
+                result.append(book.getAuthor());
+                result.append('\n');
+            }
+        }
+        return result.toString();
     }
 
     private void tryPost (String method, String url, HttpEntity<Telegram.Webhook> request) {

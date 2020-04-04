@@ -49,23 +49,6 @@ public class AuthorProcessingService implements AuthorServices {
     }
 
     @Override
-    public String getAllAuthorsString() {
-        StringBuilder result = new StringBuilder();
-        List<AuthorDTO> authorDTOList = getAllAuthors();
-        if (authorDTOList.isEmpty()) {
-            result.append("No authors here");
-        } else {
-            for (AuthorDTO author : authorDTOList) {
-                result.append(author.getName());
-                result.append(" ");
-                result.append(author.getBookCount());
-                result.append('\n');
-            }
-        }
-        return result.toString();
-    }
-
-    @Override
     public AuthorDTO getAuthor(Long id) {
         log.debug("Getting the author by ID");
         AuthorDTO authorDTO = new AuthorDTO();

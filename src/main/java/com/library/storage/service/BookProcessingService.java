@@ -110,23 +110,6 @@ public class BookProcessingService implements BookServices {
     }
 
     @Override
-    public String getAllBooksString() {
-        StringBuilder result = new StringBuilder();
-        List<BookDTO> bookDTOList = getAllBooks();
-        if (bookDTOList.isEmpty()) {
-            result.append("No books here");
-        } else {
-            for (BookDTO book : bookDTOList) {
-                result.append(book.getTitle());
-                result.append(" - ");
-                result.append(book.getAuthor());
-                result.append('\n');
-            }
-        }
-        return result.toString();
-    }
-
-    @Override
     public BookDTO getBookByAuthorAndId(Long authorId, Long bookId) {
         log.debug("Getting the book by the author ID and book ID");
         Book book = bookRepository.findBookById(bookId);
